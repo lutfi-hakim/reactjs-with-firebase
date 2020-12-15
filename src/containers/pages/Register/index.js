@@ -17,27 +17,24 @@ class Register extends Component {
             [e.target.id]: e.target.value,
         })
     }
-    handleRegisterSubmit = () => {
+    handleRegisterSubmit = async () => {
         const { email, password } = this.state;
-        console.log('before send: ', email, password);
-        this.props.registerAPI({ email, password });
-        // firebase.auth().createUserWithEmailAndPassword(email, password)
-        //     .then((res) => {
-        //         console.log('success: ', res);
-        //     })
-        //     .catch((error) => {
-        //         var errorCode = error.code;
-        //         var errorMessage = error.message;
-        //         console.log(errorMessage, errorCode);
-        //     });
+        // console.log('before send: ', email, password);
+        const res = await this.props.registerAPI({ email, password }).catch(err => err);
+        if (res) {
+            this.setState({
+                email: '',
+                password: ''
+            })
+        }
     }
     render() {
         return (
             <div className="regist-container">
                 <div className="regist-card">
                     <p className="heading-card">Register Page</p>
-                    <input className="input" placeholder="Email" id="email" type="text" onChange={this.handleChangeText} />
-                    <input className="input" placeholder="Password" id="password" type="password" onChange={this.handleChangeText} />
+                    <input className="input" placeholder="Email" id="email" type="text" onChange={this.handleChangeText} value={this.state.email} />
+                    <input className="input" placeholder="Password" id="password" type="password" onChange={this.handleChangeText} value={this.state.password} />
                     {/* <button className="btn" onClick={this.handleRegisterSubmit}>Register</button> */}
                     <Button onClick={this.handleRegisterSubmit} title="Register" loading={this.props.isLoading} />
                 </div>
