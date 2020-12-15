@@ -68,3 +68,9 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+### example reactjs with firebase
+menggunakan atomic design sehingga tertata rapi sesuai bagian folder, menggunakan authentication, crud, dengan firebase. 
+
+### REDUX-THUNK
+1. sign up(register) -> asyncronous integration firebase
