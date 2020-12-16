@@ -1,4 +1,4 @@
-import firebase from '../../../config/firebase';
+import firebase, { database } from '../../../config/firebase';
 
 
 export const actionUserName = () => (dispatch) => {
@@ -31,12 +31,14 @@ export const loginUserAPI = (data) => (dispatch) => {
         dispatch({ type: 'CHANGE_LOADING', value: true })
         firebase.auth().signInWithEmailAndPassword(data.email, data.password)
             .then((res) => {
-                console.log('success: ', res);
+                //console.log('success: ', res);
                 const dataUser = {
                     email: res.user.email,
                     uid: res.user.uid,
-                    emailVerified: res.user.emailVerified
+                    emailVerified: res.user.emailVerified,
+                    refreshToken: res.user.refreshToken
                 }
+                console.log('success: ', dataUser);
                 dispatch({ type: 'CHANGE_LOADING', value: false });
                 dispatch({ type: 'CHANGE_ISLOGIN', value: true });
                 dispatch({ type: 'CHANGE_USER', value: dataUser });
@@ -51,4 +53,12 @@ export const loginUserAPI = (data) => (dispatch) => {
                 reject(false);
             })
     })
-} 
+}
+
+export const addDataToAPI = (data) => (dispatch) => {
+    database.ref('notes/' + data.userId).push({
+        title: data.title,
+        content: data.content,
+        date: data.date
+    })
+}
