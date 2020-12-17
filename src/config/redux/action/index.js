@@ -30,7 +30,7 @@ export const loginUserAPI = (data) => (dispatch) => {
     return new Promise((resolve, reject) => {
         dispatch({ type: 'CHANGE_LOADING', value: true })
         firebase.auth().signInWithEmailAndPassword(data.email, data.password)
-            .then((res) => {
+            .then(res => {
                 //console.log('success: ', res);
                 const dataUser = {
                     email: res.user.email,
@@ -39,17 +39,17 @@ export const loginUserAPI = (data) => (dispatch) => {
                     refreshToken: res.user.refreshToken
                 }
                 console.log('success: ', dataUser);
-                dispatch({ type: 'CHANGE_LOADING', value: false });
-                dispatch({ type: 'CHANGE_ISLOGIN', value: true });
-                dispatch({ type: 'CHANGE_USER', value: dataUser });
-                resolve(true);
+                dispatch({ type: 'CHANGE_LOADING', value: false })
+                dispatch({ type: 'CHANGE_ISLOGIN', value: true })
+                dispatch({ type: 'CHANGE_USER', value: dataUser })
+                resolve(dataUser);
             })
             .catch((error) => {
                 var errorCode = error.code;
                 var errorMessage = error.message;
                 console.log(errorCode, errorMessage);
-                dispatch({ type: 'CHANGE_LOADING', value: false });
-                dispatch({ type: 'CHANGE_ISLOGIN', value: false });
+                dispatch({ type: 'CHANGE_LOADING', value: false })
+                dispatch({ type: 'CHANGE_ISLOGIN', value: false })
                 reject(false);
             })
     })
@@ -60,5 +60,41 @@ export const addDataToAPI = (data) => (dispatch) => {
         title: data.title,
         content: data.content,
         date: data.date
+    })
+}
+
+export const getDataFormAPI = (userId) => (dispatch) => {
+    const urlNotes = database.ref('notes/' + userId)
+    return new Promise((resolve, reject) => {
+        urlNotes.on('value', (snapshot) => {
+            console.log('data get: ', snapshot.val());
+            //menjadikan data array
+            const data = [];
+            Object.keys(snapshot.val()).map(key => {
+                data.push({
+                    id: key,
+                    data: snapshot.val()[key]
+                })
+            })
+            dispatch({ type: 'SET_NOTES', value: data })
+            resolve(snapshot.val())
+        });
+    })
+}
+
+export const updateDataAPI = (data) => (dispatch) => {
+    const urlNotes = database.ref(`notes/${data.userId}/${data.noteId}`)
+    return new Promise((resolve, reject) => {
+        urlNotes.set({
+            title: data.title,
+            content: data.content,
+            date: data.date
+        }, (err) => {
+            if (err) {
+                reject(false);
+            } else {
+                resolve(true);
+            }
+        });
     })
 }
