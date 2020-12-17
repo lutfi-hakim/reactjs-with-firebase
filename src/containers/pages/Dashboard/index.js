@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addDataToAPI, getDataFormAPI, updateDataAPI } from '../../../config/redux/action';
+import { addDataToAPI, getDataFormAPI, updateDataAPI, deleteDataAPI } from '../../../config/redux/action';
 import './dashboard.scss';
 
 class Dashboard extends Component {
@@ -60,10 +60,22 @@ class Dashboard extends Component {
             textButton: 'SIMPAN'
         })
     }
+    deleteNote = (e, note) => {
+        e.stopPropagation();
+        const { deleteNote } = this.props;
+        const userData = JSON.parse(localStorage.getItem('userData'))
+
+        const data = {
+            userId: userData.uid,
+            noteId: note.id,
+        }
+        deleteNote(data);
+        console.log(data);
+    }
     render() {
         const { title, content, textButton } = this.state
         const { notes } = this.props;
-        const { updateNotes, cancelUpdate } = this;
+        const { updateNotes, cancelUpdate, deleteNote } = this;
         console.log('notes: ', notes);
         return (
             <div className="container">
@@ -92,6 +104,7 @@ class Dashboard extends Component {
                                             <p className="title">{note.data.title}</p>
                                             <p className="date">{note.data.date}</p>
                                             <p className="content">{note.data.content}</p>
+                                            <div className="delete-btn" onClick={(e) => deleteNote(e, note)}>X</div>
                                         </div>
                                     )
                                 })
@@ -112,7 +125,8 @@ const reduxState = (state) => ({
 const reduxDispatch = (dispatch) => ({
     saveNotes: (data) => dispatch(addDataToAPI(data)),
     getNotes: (data) => dispatch(getDataFormAPI(data)),
-    updateNotes: (data) => dispatch(updateDataAPI(data))
+    updateNotes: (data) => dispatch(updateDataAPI(data)),
+    deleteNote: (data) => dispatch(deleteDataAPI(data)),
 })
 
 export default connect(reduxState, reduxDispatch)(Dashboard);

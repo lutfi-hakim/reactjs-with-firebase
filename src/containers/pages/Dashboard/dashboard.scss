@@ -68,12 +68,13 @@
         padding: 16px;
         box-shadow: 4px 3px 9px rgba(0, 0, 0, 0.1);
         margin-bottom: 16px;
-        transition: all ease 0.35s;
-
+        transition: ease 0.35s;
+        position: relative;;
         &:hover {
             cursor: pointer;
             background-color: rgba(0, 0, 0, 0.1);
-            transform: translateY(-4px);
+            transform: translateY(-5px);
+           // transform: scale(1.1);
         }
 
         p {
@@ -92,6 +93,26 @@
         .content {
             margin-top: 20px;
             font-size: 14px;
+        }
+        .delete-btn{
+            width: 30px;
+            height: 30px;
+            background-color: red;
+            border-radius: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: white;
+            position: absolute;
+            top: -15px;
+            right: -15px;
+          //  transition: ease-in .3s;
+            &:hover{
+                cursor: pointer;
+                background-color: rgba(241, 67, 67, 0.877);
+               // transform:scale(1.1);
+            }
         }
     }
 }
